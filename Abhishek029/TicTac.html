@@ -1,0 +1,222 @@
+<html>
+<head>
+	<title>Tic Tac Toe</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+	<script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+ 
+
+	<div class="box1">
+	<h1>WELCOME! LETS PLAY TIC TAC TOE</h1>
+
+	<label>Enter Id of player 1 </label>
+<input type="text" id="Id1">
+<br><br>
+	<label>Enter Username of player 1</label>
+<input type="text" id="Username1">
+<br><br>
+<label>Enter Id of player 2(Should be an existing player)</label>
+<input type="text" id="Id2">
+<br><br>
+
+<br><br>
+<label>Enter Username of player 2(Should be an existing player) </label>
+<input type="text" id="Username2">
+<br><br>
+<button onclick="getScore(Id1,Id2)"> Submit</button>
+<label >Player 1's Score </label>
+<input type="text" id="Score1"><br>
+
+<label >Player 2's Score </label>
+<input type="text" id="Score2"><br>
+
+
+
+<table>
+
+<tr>
+<td ><button id="1" class="button" onclick="AssignValue(this.id)" value="1">.</button></td>
+<td ><button id="2" class="button" onclick="AssignValue(this.id)" value="2">.</button></td>
+<td ><button id="3" class="button" onclick="AssignValue(this.id)" value="3">.</button></td>
+</tr>
+<tr>
+	<td > <button id="4" class="button" onclick="AssignValue(this.id)" value="4">.</button></td>
+	<td > <button id="5" class="button" onclick="AssignValue(this.id)" value="5">.</button></td>
+	<td > <button id="6" class="button" onclick="AssignValue(this.id)" value="6">.</button></td>
+
+</tr>
+<tr>
+<td > <button id="7" class="button" onclick="AssignValue(this.id)" value="7">.</button></td>
+<td > <button id="8" class="button" onclick="AssignValue(this.id)" value="8">.</button></td>
+<td > <button id="9" class="button" onclick="AssignValue(this.id)" value="9">.</button></td>
+
+</tr>
+
+</table>
+
+</div>
+<script type="text/javascript">
+
+   var ctr=0;
+   var score1=0;
+   var score2=0;
+   var Id1=document.getElementById('Id1').value;;
+   var Id2=document.getElementById('Id2').value;
+   var Username1=document.getElementById('Username1').value;
+   var Username2=document.getElementById('Username2').value;
+
+function AssignValue(id){
+
+	
+	if(ctr%2==0)
+	{
+		document.getElementById(id).value='1';
+		document.getElementById(id).innerHTML='O';
+		ValidatePlayer1();   
+	}
+
+	else 
+	{
+		document.getElementById(id).value='2';
+		document.getElementById(id).innerHTML='X';
+		ValidatePlayer2();
+	}
+
+    ctr++;
+
+}
+
+
+
+
+
+function ValidatePlayer1(){
+	
+var a=document.getElementById('1').value;
+var b=document.getElementById('2').value;
+var c=document.getElementById('3').value;
+var d=document.getElementById('4').value;
+var e=document.getElementById('5').value;
+var f=document.getElementById('6').value;
+var g=document.getElementById('7').value;
+var h=document.getElementById('8').value;
+var i=document.getElementById('9').value;
+
+
+if(( a==b && b==c )||
+	(d==e && e==f) ||
+	(g==h && h==i )||
+	(a==d && d==g) ||
+	(b==e && e==h )||
+	(c==f && f==i )||
+	(a==e && e==i )||
+	(c==e && e==g))
+	{
+	alert('Player 1 Has Won');
+	score1=score1+15;
+    score2=score2-5;
+    
+    SaveScore(Id1,Username1,score1);
+	SaveScore(Id2,Username2,score2);
+	}
+
+}
+
+function ValidatePlayer2(){
+	
+var a=document.getElementById('1').value;
+var b=document.getElementById('2').value;
+var c=document.getElementById('3').value;
+var d=document.getElementById('4').value;
+var e=document.getElementById('5').value;
+var f=document.getElementById('6').value;
+var g=document.getElementById('7').value;
+var h=document.getElementById('8').value;
+var i=document.getElementById('9').value;
+
+if(( a==b && b==c )||
+	(d==e && e==f) ||
+	(g==h && h==i )||
+	(a==d && d==g) ||
+	(b==e && e==h )||
+	(c==f && f==i )||
+	(a==e && e==i )||
+	(c==e && e==g))
+	{
+	alert('Player 2 Has Won');
+	score2=score2+15;
+    score1=score1-5;
+	
+	SaveScore(Id2,Username2,score2);
+	SaveScore(Id1,Username1,score1);
+	}
+	
+}
+   
+
+  
+   
+function SaveScore(Ide,Usernamee,Scoree){
+	
+	var Id = Ide;
+	var Username  = Usernamee;
+	var Score= Scoree;
+	 var obj={
+	 	Id, Username, Score
+	  };
+	  
+	  var Url='http://localhost:54713/api/Scores/'+Id;
+	  
+	  $.ajax({
+            url: Url,
+            type: 'PUT',
+            dataType: 'json',
+            data: obj,
+            success: function(data){
+            console.log(data);
+            alert('Scores have been updated!');
+        
+        }
+        
+        });
+}
+
+function getScore(id1,id2){
+   
+    var Data={};`
+        $.ajax({
+            url: 'http://localhost:54713/api/Scores/'+id1,
+            type: 'GET',
+            dataType: 'json',
+            success: function(res){
+            console.log(res);
+        	Data= res;
+         }
+
+        }); 
+        document.getElementById('score1').value=Data['Score1'];
+var Data2={};
+        $.ajax({
+            url: 'http://localhost:54713/api/Scores/'+id2,
+            type: 'GET',
+            dataType: 'json',
+            success: function(res2){
+            console.log(res2);
+        	Data2= res2;
+         }
+
+        }); 
+        document.getElementById('score2').value=Data2['Score1'];
+
+        
+    }
+
+    
+
+</script>
+</body>
+</html>

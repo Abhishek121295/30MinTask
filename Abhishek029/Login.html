@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PLAYER LOGIN</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+	
+	<div class="container" >
+	<div class="box1">
+<h1>TIC TAC TOE LOGIN PAGE</h1>
+<br>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+
+
+<label class="label"> User Id </label> <br>
+<input type="text" id='Id'   placeholder='Id'> <br> <br>
+
+<label class="label"> Username </label> <br>
+<input type="text" id='Username'   placeholder='Username'> <br> <br>
+
+<label class="label">Password </label> <br>
+<input type="Password" id='Password' placeholder='Password'>
+<br> <br>
+<button class="button" onclick="getDetails()">Login</button>
+
+<button class="button" onclick="reset()">Reset</button>
+<br> <br>
+
+<a href="Signup.html" target="_blank"> Create New Account</a>
+  
+ 
+
+<script type="text/javascript">
+
+function reset(){
+
+	document.getElementById('Username').value="";
+	document.getElementById('Password').value="";
+}
+
+
+
+var Data={};
+function getDetails(){
+	var id=document.getElementById('Id').value;
+   var Url='http://localhost:54713/api/Accounts/'+id;
+    
+        $.ajax({
+            url:Url ,
+            type: 'GET',
+            dataType: 'json',
+            success: function(res){
+            console.log(res);
+        	Data= res;
+        	validate();
+        }
+        });
+        
+    }
+
+
+function validate(){
+
+	if (document.getElementById('Username').value==Data['Username'] && document.getElementById('Password').value==Data['Pass'])
+	{
+		location.href='TicTac.html'
+		alert('Login Successful');
+		
+	}
+
+	else if(document.getElementById('Username').value=='' && document.getElementById('Password').value=='')
+	{
+		alert('Fields cant be Empty');
+	}
+
+     else alert(' Id and Password Do not Match');
+
+	
+	
+	
+	
+    
+    
+}
+	</script>
+	</div>
+  </div>
+</body>
+
+</html>
